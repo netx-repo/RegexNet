@@ -56,7 +56,16 @@ function build_detector() {
     cp -r source/classifier/data.py build/detector/
     cp -r source/classifier/test.py build/detector/
     echo "Copy detector"
-    echo "Copy detector"
+}
+
+# Copy adversary
+function build_adversary() {
+    cp -r source/adversary build/
+    cp -r source/classifier/model_cnn.py build/adversary/
+    cp -r source/classifier/spp.py build/adversary/
+    cp -r source/classifier/data.py build/adversary/
+    cp -r source/classifier/test.py build/adversary/
+    echo "Copy adversary"
 }
 
 # Copy unit tests

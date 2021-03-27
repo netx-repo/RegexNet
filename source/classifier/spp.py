@@ -34,4 +34,8 @@ class SPPLayer(nn.Module):
                 res = tensor
             else:
                 res = torch.cat((res, tensor), 1)
+<<<<<<< HEAD
         return res
+=======
+        return res
+>>>>>>> master

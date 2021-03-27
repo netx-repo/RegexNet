@@ -13,7 +13,6 @@
 #include "util/tcp_tool.h"
 #include "util/tool.h"
 
-// load balancer addr, x5
 #define ADDR_MANAGER "172.31.38.81"
 
 #define PORT_COLLECTOR  9003
@@ -61,36 +60,45 @@ int main() {
     while (true) {
         report_t *rpt = collector_listen.get_report();
         if (rpt != NULL) {
+            printf ("%d, %d\n", rpt->type, rpt->id);
             if (rpt->type == MESSAGE_REQUEST) {
                 report_t *req = rpt;
                 report_map.insert(pair<int, report_t*>(req->id, req));
             }
             else {
                 report_t *res = rpt;
+<<<<<<< HEAD
+                if (report_map.find(res->id) != report_map.end()) {
+                    report_t *req = report_map.at(res->id);
+                    report_map.erase(res->id);
+                    long long latency = res->timestamp - req->timestamp;
+=======
                 auto itr = report_map.find(res->id);
                 if (itr == report_map.end())
                     continue;
                 report_t *req = itr->second;
                 report_map.erase(itr);
                 long long latency = res->timestamp - req->timestamp;
+>>>>>>> master
 
-                int conn = -1;
-                while (conn < 0)
-                    conn = client.request_connection(ip_str_to_int(ADDR_MANAGER), PORT_MANAGER);
+                    int conn = -1;
+                    while (conn < 0)
+                        conn = client.request_connection(ip_str_to_int(ADDR_MANAGER), PORT_MANAGER);
 
-                char metadata[128];
-                memset(metadata, 0, 128);
-                sprintf(metadata, "%32d; %64lld;", rpt->id, latency);
-                client.tcp_send(conn, metadata, 128);
+                    char metadata[128];
+                    memset(metadata, 0, 128);
+                    sprintf(metadata, "%32d; %64lld;", rpt->id, latency);
+                    client.tcp_send(conn, metadata, 128);
 
-                client.tcp_send(conn, req->buffer, req->length);
-                printf ("Report: %s\n", metadata);
-                printf ("\tSent: %d\n", req->length);
+                    client.tcp_send(conn, req->buffer, req->length);
+                    printf ("Report: %s\n", metadata);
+                    printf ("\tSent: %d\n", req->length);
 
-                shutdown(conn, SHUT_WR);
-                close(conn);
+                    shutdown(conn, SHUT_WR);
+                    close(conn);
 
-                delete req;
+                    delete req;
+                }
                 delete res;
             }
         }

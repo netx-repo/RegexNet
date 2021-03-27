@@ -140,8 +140,12 @@ def main():
     n_letters = data.n_letters
     n_categories = data.n_categories
     n_hidden = 32
+<<<<<<< HEAD
+    model = model_cnn.Model(n_letters, n_hidden, n_categories)
+=======
     n_spp_num_level = 3
     model = model_cnn.Model(n_letters, n_hidden, n_categories, n_spp_num_level)
+>>>>>>> master
     print ('Create the model')
 
     params = {

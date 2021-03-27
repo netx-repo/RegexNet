@@ -12,6 +12,8 @@ import os
 import math
 import sys
 
+ADVERSARY_ADDR = '172.31.70.125'
+
 PORT_DETECTOR = 9001
 PORT_WARNING = 9002
 MAX_LENGTH = 100000
@@ -138,16 +140,7 @@ def handle_report():
             data = data + conn.recv(MAX_LENGTH)
         conn.close()
 
-        if len(data_benign) < 900:
-            total = total + 1
-            length_sum = length_sum + len(data)
-            length_sq_sum = length_sq_sum + len(data) * len(data)
-            latency_sum = latency_sum + latency
-            latency_sq_sum = latency_sq_sum + latency * latency
-
-        cnt = cnt + 1
-        if not is_strange(total, latency_sum, latency_sq_sum, latency):
-        # if len(data)< 10000:
+        if len(data) < 1000:
             lock.acquire()
 
             file_name = train_data_folder + str(cnt) + "-0.txt"
@@ -160,17 +153,21 @@ def handle_report():
             lock.release()
         else:
             lock.acquire()
-            print(len(data))
-
-            file_name = train_data_folder + str(cnt) + "-1.txt"
-            with open(file_name,"a+") as f:
-                f.write(str(data.decode()))
-
-
-            if is_strange(total, length_sum, length_sq_sum, len(data)):
-                print ('Receive malicious sample %d: %d, %d' % (id, len(data), latency))
-                data_malicious.append(data.decode())
+            print ('Receive malicious sample %d: %d, %d' % (id, len(data), latency))
+            data_malicious.append(data.decode())
             lock.release()
+
+def send_notification(data):
+    print ('Notify')
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((ADVERSARY_ADDR, PORT_MODEL_READY))
+    length = len(data)
+    length_str = '%8d' % length
+    legnth_str_b = length_str.encode()
+    s.send(legnth_str_b)
+    data_b = data.encode()
+    s.send(data_b)
+    s.close()
 
 def handle_training():
     global lock
@@ -181,7 +178,7 @@ def handle_training():
     if os.path.isfile(model_path):
         model = torch.load(model_path)
     else:
-        model = model_cnn.Model(data_module.n_letters, 32, data_module.n_categories, 3)
+        model = model_cnn.Model(data_module.n_letters, 64, data_module.n_categories, 3)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=0.0005)
 
     last_malicious_count = 0
@@ -199,8 +196,10 @@ def handle_training():
             while test_batch(model, data_benign, data_malicious) < 0.99:
                 flag = True
                 train_batch(model, optimizer, data_benign, data_malicious)
+                # train_batch(model, optimizer, data_benign, data_malicious)
+                # train_batch(model, optimizer, data_benign, data_malicious)
 
-            if flag:
+            if flag or not os.path.isfile(flag_path):
                 model.to(cpu)
                 torch.save(model, model_path)
                 os.system('echo finish > %s' % flag_path)

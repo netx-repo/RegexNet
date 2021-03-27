@@ -135,7 +135,7 @@ public:
 
         pid = fork();
         if (pid == 0){
-            if(execle("/home/ubuntu/regexnet/build/node/bin/node", "node", "/home/ubuntu/regexnet/build/application/app.js", NULL, envp) < 0) {
+            if(execle("/home/ubuntu/regexnet/build/node/bin/node", "node", "/home/ubuntu/regexnet/build/application/app.js", NULL, envp) < 0) {   
                 perror("error on execl");
             }
         }

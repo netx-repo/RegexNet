@@ -70,10 +70,10 @@ def send_warning(server, id):
         s.connect((server, PORT_WARNING))
         s.send(bytes(str(id), 'ascii'))
         s.close()
-        print ('Malicious, %f, %d, Signal' % (time.time(), id))
+        # print ('Malicious, %f, %d, Signal' % (time.time(), id))
     except:
         # print ('Connect error')
-        print ('Malicious, %f, %d, Miss' % (time.time(), id))
+        # print ('Malicious, %f, %d, Miss' % (time.time(), id))
         pass
 
 def handle_request(model_path, flag_path):
@@ -144,8 +144,8 @@ def main():
         data = data_b.decode()
 
         #id = http_get_unique_id(data)
-        # if length > 1000:
-        #     print ('Receive potential malicious request: %f, %d\n' % (time.time(), length))
+        if length > 1000:
+            print ('Receive potential malicious request: %f, %d\n' % (time.time(), length))
 
         #if id <= seqno:
         #    continue

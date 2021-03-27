@@ -4,7 +4,11 @@ import spp
 
 
 class Model(nn.Module):
+<<<<<<< HEAD
+    def __init__(self, input_size, hidden_size, output_size, spp_num_level=3):
+=======
     def __init__(self, input_size, hidden_size, output_size, spp_num_level):
+>>>>>>> master
         super(Model, self).__init__()
 
         self.input_size = input_size
@@ -25,8 +29,19 @@ class Model(nn.Module):
         device = next(self.parameters()).device
 
         x = self.embeddings(x).transpose(1, 2)
+<<<<<<< HEAD
+        # print(x.size())
+        x = torch.tanh(self.conv1(x))
+        # print(x.size())
+        x = self.spp(x)
+        # print(x.size())
+        x = self.linear(x)
+        x = self.softmax(x)
+        return x
+=======
         x = torch.tanh(self.conv1(x))
         x = self.spp(x)
         x = self.linear(x)
         x = self.softmax(x)
         return x
+>>>>>>> master

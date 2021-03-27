@@ -10,6 +10,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
+<<<<<<< HEAD
+=======
+import model_rnn
+>>>>>>> master
 import model_cnn
 import data
 import train
@@ -185,6 +189,19 @@ def main():
     # test_step = args.test_steps
     batch_size = args.batch_size
     n_iters = args.n_iters
+<<<<<<< HEAD
+    
+    dataset_train = data.Dataset(dataset_train_folder)
+    print ('Input dataset_train complete')
+    dataset_test = data.Dataset(dataset_test_folder)
+    print ('Input dataset_test complete')
+    
+    n_letters = data.n_letters
+    n_categories = data.n_categories
+    n_hidden = 32
+    model = model_cnn.Model(n_letters, n_hidden, n_categories)
+    print ('Create the model')
+=======
     init_model_path = args.init_model_path
     # test_steps = [i for i in range(0, n_iters+1, test_step)]
 
@@ -198,6 +215,7 @@ def main():
         n_categories = data.n_categories
         n_hidden = 32
         n_spp_num_level = 3
+        # model = model_rnn.Model(n_letters, n_hidden, n_categories)
         model = model_cnn.Model(n_letters, n_hidden, n_categories, n_spp_num_level)
         # print('Create the model')
     else:
@@ -206,6 +224,7 @@ def main():
 
     with open(file_name, 'a') as f:
         f.write(dataset_train_folder + '\n')
+>>>>>>> master
 
     params = {
         'dataset_train': dataset_train,
