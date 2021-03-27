@@ -1,0 +1,28 @@
+# Temporary folder
+tmp
+.vscode
+
+# Build folder
+build
+
+# Output folder
+output
+
+# Temporary files for jupyter notebook
+figures/__pycache__
+figures/.ipynb_checkpoints
+figures/*.pdf
+
+# Temperary log file
+log*.txt
+
+# Compiled python files
+*.pyc
+
+# Model files
+model.bin
+flag.txt
+
+# Third-party
+third-party/*
+!third-party/nodejs.sh
