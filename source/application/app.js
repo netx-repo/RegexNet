@@ -334,47 +334,47 @@ app.use((req, res, next) => {
     //     content.type(req.headers["content-type"]);
 
     // Trigger forwarded
-    /*forwarded(req);*/
+    // forwarded(req);
 
     // Trigger mobile-detect
-    /*if (req.headers['user-agent']) {
-        var md = new MobileDetect(req.headers['user-agent']);
-        md.phone();
-    }*/
+    // if (req.headers['user-agent']) {
+    //     var md = new MobileDetect(req.headers['user-agent']);
+    //     md.phone();
+    // }
 
     // Trigger platform
-    /*if (req.headers['user-agent']) {
-        platform.parse(req.headers['user-agent']);
-    }*/
+    // if (req.headers['user-agent']) {
+    //     platform.parse(req.headers['user-agent']);
+    // }
 
     // Trigger tough-cookie
-    /*if (req.headers['tough-cookie']) {
-        ToughCookie.parse(req.headers['tough-cookie']);
-    }*/
+    // if (req.headers['tough-cookie']) {
+    //     ToughCookie.parse(req.headers['tough-cookie']);
+    // }
         
     // Trigger moment
-    /*if (req.headers['moment'])
-        moment(req.headers['moment'], "MMM");*/
+    // if (req.headers['moment'])
+    //     moment(req.headers['moment'], "MMM");
 
     // Trigger marked
-    /*if (req.headers['marked'])
-        marked(req.headers['marked']);*/
+    // if (req.headers['marked'])
+    //     marked(req.headers['marked']);
 
     // Trigger ua-parser-js
     // if (req.headers['ua-parser-js'])
     //     UAParser(req.headers['ua-parser-js']);
 
     // Trigger ms
-    /*if (req.headers['ms'])
-        ms(req.headers['ms']);*/
+    // if (req.headers['ms'])
+    //     ms(req.headers['ms']);
 
     // Trigger uglify-js
-    /*if (req.headers['uglify-js'])
-        uglify.parse(req.headers['uglify-js']);*/
+    // if (req.headers['uglify-js'])
+    //     uglify.parse(req.headers['uglify-js']);
 
     // Trigger useragent
-    /*if (req.headers['user-agent'])
-        var agent = useragent.parse(req.headers['user-agent']);*/
+    // if (req.headers['user-agent'])
+    //     var agent = useragent.parse(req.headers['user-agent']);
 
     req.handlebars = handlebars;
     next();

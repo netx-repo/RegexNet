@@ -24,49 +24,10 @@
 static int customize_seqno = 0;
 static time_t last_time = 0;
 static int customize_throughput = 0;
-static int customize_conn_fd = -1;
-
-static void customize_send(const char *content, const unsigned int length) {
-	/*if (length > 1000) {
-		printf ("Forward potential malicious request\n");
-	}*/
-	
-	struct timeval stop, start;
-
-	if (customize_conn_fd < 0) {
-		if ( (customize_conn_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) { 
-			perror("socket creation failed"); 
-			exit(EXIT_FAILURE);
-		}
-
-		struct sockaddr_in servaddr;
-		memset(&servaddr, 0, sizeof(servaddr)); 
-		servaddr.sin_family = AF_INET;
-		servaddr.sin_addr.s_addr = inet_addr(ADDR_DETECTOR);
-		servaddr.sin_port = htons(PORT_DETECTOR);
-
-		gettimeofday(&start, NULL);
-		if (connect(customize_conn_fd, (struct sockaddr *)&servaddr, sizeof(servaddr)) != 0) {
-			perror("connect failed"); 
-			exit(EXIT_FAILURE);
-		}
-		gettimeofday(&stop, NULL);
-		printf("Connect latency %lu us\n", (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec); 
-	}
-
-	int length_n = htonl(length);
-	if (write(customize_conn_fd, &length_n, sizeof(length_n)) < 0) {
-		perror ("Send length failed"); 
-	}
-	if (write(customize_conn_fd, content, length) < 0) {
-		perror ("Send content failed"); 
-	}
-}
 
 static void customize_copy_to_detector(struct http_msg msg, int id) {
 	char *content = b_ptr(msg.chn->buf, -http_hdr_rewind(&msg));
 	unsigned int length = msg.chn->buf->o;
-	customize_send(content, length);
 
 	if (id > customize_seqno){
 		customize_seqno = id;

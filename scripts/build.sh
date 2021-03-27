@@ -6,15 +6,9 @@ function build_generator() {
     echo "Copy dataset generator"
 }
 
-# Copy classifier
-function build_classifier() {
-    cp -r source/classifier build/
-    echo "Copy classifier"
-}
-
 # Compile HAProxy and move to build file
 function build_haproxy() {
-    cd source/haproxy-with
+    cd source/haproxy
     make TARGET=linux2628
     mkdir $WORK_DIR/build/haproxy
     cp haproxy $WORK_DIR/build/haproxy/
@@ -22,41 +16,6 @@ function build_haproxy() {
     make clean
     cd $WORK_DIR
     echo "Compile HAProxy"
-}
-
-# Compile data_collector
-function build_collector() {
-    mkdir build/data_collector
-    g++ -Isource \
-        -o build/data_collector/data_collector \
-        source/data_collector/data_collector.cpp
-}
-
-# Copy data_manager
-function build_manager() {
-    cp -r source/data_manager build/
-    cp -r source/classifier/* build/data_manager/
-    echo "Copy data_manager"
-}
-
-# Compile http_proxy
-function build_proxy() {
-    mkdir build/http_proxy
-    g++ -Isource \
-        -std=c++11 \
-        -o build/http_proxy/http_proxy \
-        source/http_proxy/http_proxy.cpp
-}
-
-# Copy detector
-function build_detector() {
-    cp -r source/detector build/
-    cp -r source/classifier/model_cnn.py build/detector/
-    cp -r source/classifier/spp.py build/detector/
-    cp -r source/classifier/data.py build/detector/
-    cp -r source/classifier/test.py build/detector/
-    echo "Copy detector"
-    echo "Copy detector"
 }
 
 # Copy unit tests
@@ -115,12 +74,7 @@ echo "Create the build folder"
 case "$1" in
     all)
         build_generator
-        build_classifier
         build_haproxy
-        build_collector
-        build_manager
-        build_proxy
-        build_detector
         build_unit_test
         build_attacker
         build_nodejs
@@ -130,23 +84,8 @@ case "$1" in
     generator)
         build_generator
         ;;
-    classifier)
-        build_classifier
-        ;;
     haproxy)
         build_haproxy
-        ;;
-    collector)
-        build_collector
-        ;;
-    manager)
-        build_manager
-        ;;
-    http_proxy)
-        build_proxy
-        ;;
-    detector)
-        build_detector
         ;;
     application)
         build_application
